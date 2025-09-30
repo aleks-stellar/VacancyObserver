@@ -8,10 +8,10 @@ class HeadHunterAPI(BaseAPI):
         """Метод инициализации"""
         pass
 
-    def send_request(self):
+    def _send_request(self):
         """Метод отправки POST-запроса на сервер API"""
         pass
 
-    def process_response(self):
+    def _process_response(self):
         """Метод обработки GET-ответа"""
         pass
