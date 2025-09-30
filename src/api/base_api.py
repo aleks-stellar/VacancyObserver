@@ -13,3 +13,8 @@ class BaseAPI(ABC):
     def _process_response(self):
         """Метод обработки GET-ответа"""
         pass
+
+    @abstractmethod
+    def get_vacancies(self):
+        """Публичный метод для получения вакансий"""
+        pass

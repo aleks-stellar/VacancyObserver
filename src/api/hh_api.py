@@ -15,3 +15,7 @@ class HeadHunterAPI(BaseAPI):
     def _process_response(self):
         """Метод обработки GET-ответа"""
         pass
+
+    def get_vacancies(self):
+        """Публичный метод для получения вакансий c HeadHunter"""
+        pass
