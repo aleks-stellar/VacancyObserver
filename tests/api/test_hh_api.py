@@ -1,4 +1,7 @@
-from unittest.mock import patch
+from unittest.mock import Mock, patch
+
+import pytest
+
 from src.api.hh_api import HeadHunterAPI
 from src.api.base_api import BaseAPI
 
@@ -12,6 +15,13 @@ def test_abstract_methods_have_been_implemented():
     """Проверяем, что абстрактные методы были реализованы"""
     methods = HeadHunterAPI.__abstractmethods__
     assert methods == frozenset()
+
+
+def test_hh_api_attributes_is_private():
+    """Проверяем, что все атрибуты экземпляра класса HeadHunterAPI приватные"""
+    hh_api_obj = HeadHunterAPI()
+    attrs = [attr for attr in vars(hh_api_obj).keys() if not attr.startswith(f"_{hh_api_obj.__class__.__name__}__")]
+    assert not attrs
 
 
 @patch("src.api.hh_api.requests.get")
