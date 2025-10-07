@@ -17,6 +17,9 @@ class HeadHunterAPI(BaseAPI):
         url = self.__URL
         response = requests.get(url)
 
+        if response.status_code != 200:
+            raise ConnectionError("Bad status code")
+
         # Преобразуем ответ в JSON-формат
         data = response.json()
         return data
