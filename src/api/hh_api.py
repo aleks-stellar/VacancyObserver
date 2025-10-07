@@ -1,8 +1,12 @@
+import requests
+import json
 from src.api.base_api import BaseAPI
 
 
 class HeadHunterAPI(BaseAPI):
     """Класс для работы с API сервиса HeadHunter"""
+    # URL для поиска вакансий на HeadHunter
+    __URL = "https://api.hh.ru/vacancies"
 
     def __init__(self):
         """Метод инициализации"""
@@ -10,12 +14,16 @@ class HeadHunterAPI(BaseAPI):
 
     def _send_request(self):
         """Метод отправки POST-запроса на сервер API"""
-        pass
+        url = self.__URL
+        response = requests.get(url)
+
+        # Преобразуем ответ в JSON-формат
+        data = response.json()
+        return data
 
     def _process_response(self):
         """Метод обработки GET-ответа"""
-        pass
 
     def get_vacancies(self):
         """Публичный метод для получения вакансий c HeadHunter"""
-        pass
+        return self._send_request()
