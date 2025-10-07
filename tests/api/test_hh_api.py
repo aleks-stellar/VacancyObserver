@@ -1,5 +1,17 @@
 from unittest.mock import patch
 from src.api.hh_api import HeadHunterAPI
+from src.api.base_api import BaseAPI
+
+
+def test_headhunterapi_issubclass():
+    """Проверяем, что класс HeadHunterAPI является подклассом класса BaseAPI"""
+    assert issubclass(HeadHunterAPI,BaseAPI)
+
+
+def test_abstract_methods_have_been_implemented():
+    """Проверяем, что абстрактные методы были реализованы"""
+    methods = HeadHunterAPI.__abstractmethods__
+    assert methods == frozenset()
 
 
 @patch("src.api.hh_api.requests.get")
