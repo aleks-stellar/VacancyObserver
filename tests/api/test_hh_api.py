@@ -29,6 +29,7 @@ def test_hh_api_object_init(mock_get, vacancies_list):
     """Тестируем работу метода get_vacancies"""
 
     mock_get.return_value.json.return_value = vacancies_list
+    mock_get.return_value.status_code = 200
 
     hh_api = HeadHunterAPI()
     vacancies = hh_api.get_vacancies()
