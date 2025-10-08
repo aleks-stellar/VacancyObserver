@@ -1,5 +1,7 @@
-import pytest
 from abc import ABC
+
+import pytest
+
 from src.api.base_api import BaseAPI
 from src.api.hh_api import HeadHunterAPI
 
