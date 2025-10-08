@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import requests
 import json
 from src.api.base_api import BaseAPI
@@ -32,4 +34,5 @@ class HeadHunterAPI(BaseAPI):
 
     def get_vacancies(self, keyword, vacancies_amount):
         """Публичный метод для получения вакансий c HeadHunter"""
-        return self._send_request(keyword, vacancies_amount)
+        data = self._send_request(keyword, vacancies_amount)["items"]
+        return data
