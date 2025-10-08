@@ -1,4 +1,4 @@
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -8,7 +8,7 @@ from src.api.base_api import BaseAPI
 
 def test_headhunterapi_issubclass():
     """Проверяем, что класс HeadHunterAPI является подклассом класса BaseAPI"""
-    assert issubclass(HeadHunterAPI,BaseAPI)
+    assert issubclass(HeadHunterAPI, BaseAPI)
 
 
 def test_abstract_methods_have_been_implemented():

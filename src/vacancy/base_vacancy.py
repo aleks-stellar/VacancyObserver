@@ -1,6 +1,7 @@
 class BaseVacancy:
     """Класс для работы с вакансиями"""
-    __slots__ = () #title, link, salary, brief_desc
+
+    __slots__ = ()  # title, link, salary, brief_desc
 
     def __init__(self):
         """Метод инициализации"""

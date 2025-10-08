@@ -1,7 +1,4 @@
-from pprint import pprint
-
 import requests
-import json
 from src.api.base_api import BaseAPI
 
 

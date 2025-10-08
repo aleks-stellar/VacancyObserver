@@ -1,4 +1,4 @@
-from  src.connector.file_worker import FileWorker
+from src.connector.file_worker import FileWorker
 
 
 class JSONWorker(FileWorker):
