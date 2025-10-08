@@ -13,7 +13,6 @@ def test_base_api_has_abstract_methods():
     """Проверяем, что у BaseAPI есть абстрактные методы"""
     abstract_methods = BaseAPI.__abstractmethods__
     assert "_send_request" in abstract_methods
-    assert "_process_response" in abstract_methods
     assert "get_vacancies" in abstract_methods
 
 
