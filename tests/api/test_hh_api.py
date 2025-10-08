@@ -48,3 +48,21 @@ def test_hh_api_status_code_check(mock_get, vacancies_list):
 
     with pytest.raises(ConnectionError):
         HeadHunterAPI().get_vacancies()
+
+
+@patch("src.api.hh_api.requests.get")
+def test_hh_api_request_params(mock_get):
+    """Проверяем, что метод get_vacancies формирует параметры text и per_page"""
+
+    hh_api = HeadHunterAPI()
+    hh_api.get_vacancies("Python", 5)
+
+    # Проверяем, что метод requests.get был вызван
+    mock_get.assert_called_once()
+
+    # Извлекаем аргументы, с которыми был вызван requests.get
+    _, kwargs = mock_get.call_args
+
+    params = kwargs.get("params", {})
+    assert "text" in params, "Параметр 'text' отсутствует в запросе"
+    assert "per_page" in params, "Параметр 'per_page' отсутствует в запросе"
