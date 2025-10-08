@@ -10,11 +10,6 @@ class BaseAPI(ABC):
         pass
 
     @abstractmethod
-    def _process_response(self):
-        """Метод обработки GET-ответа"""
-        pass
-
-    @abstractmethod
     def get_vacancies(self, keyword, vacancies_amount):
         """Публичный метод для получения вакансий"""
         pass

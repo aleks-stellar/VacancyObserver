@@ -30,9 +30,6 @@ class HeadHunterAPI(BaseAPI):
         data = response.json()
         return data
 
-    def _process_response(self):
-        """Метод обработки GET-ответа"""
-
     def get_vacancies(self, keyword, vacancies_amount):
         """Публичный метод для получения вакансий c HeadHunter"""
         return self._send_request(keyword, vacancies_amount)
