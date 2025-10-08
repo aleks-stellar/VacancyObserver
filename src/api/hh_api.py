@@ -12,10 +12,16 @@ class HeadHunterAPI(BaseAPI):
         """Метод инициализации"""
         pass
 
-    def _send_request(self):
+    def _send_request(self, text, per_page):
         """Метод отправки POST-запроса на сервер API"""
         url = self.__URL
-        response = requests.get(url)
+
+        params = {
+            "text": text,
+            "per_page": per_page
+        }
+
+        response = requests.get(url, params=params)
 
         if response.status_code != 200:
             raise ConnectionError("Bad status code")
@@ -27,6 +33,6 @@ class HeadHunterAPI(BaseAPI):
     def _process_response(self):
         """Метод обработки GET-ответа"""
 
-    def get_vacancies(self):
+    def get_vacancies(self, keyword, vacancies_amount):
         """Публичный метод для получения вакансий c HeadHunter"""
-        return self._send_request()
+        return self._send_request(keyword, vacancies_amount)

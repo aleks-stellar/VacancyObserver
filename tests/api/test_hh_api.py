@@ -54,6 +54,10 @@ def test_hh_api_status_code_check(mock_get, vacancies_list):
 def test_hh_api_request_params(mock_get):
     """Проверяем, что метод get_vacancies формирует параметры text и per_page"""
 
+    # Настраиваем поведение мока
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.json.return_value = {"items": []}
+
     hh_api = HeadHunterAPI()
     hh_api.get_vacancies("Python", 5)
 
