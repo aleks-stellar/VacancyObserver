@@ -3,7 +3,7 @@ import pytest
 
 @pytest.fixture
 def vacancies_list():
-    """Фикстура со списком ваканский из ключа items словаря"""
+    """Фикстура со списком ваканский из ключа items словаря - имитирует ответ сервера в формате JSON"""
     return {
         "items":
             [
