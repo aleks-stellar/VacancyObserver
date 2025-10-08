@@ -32,7 +32,7 @@ def test_hh_api_object_init(mock_get, vacancies_list):
     mock_get.return_value.status_code = 200
 
     hh_api = HeadHunterAPI()
-    vacancies = hh_api.get_vacancies()
+    vacancies = hh_api.get_vacancies("Python", 5)
 
     mock_get.assert_called_once()
 
@@ -47,7 +47,7 @@ def test_hh_api_status_code_check(mock_get, vacancies_list):
     mock_response.status_code = 404
 
     with pytest.raises(ConnectionError):
-        HeadHunterAPI().get_vacancies()
+        HeadHunterAPI().get_vacancies("Python", 5)
 
 
 @patch("src.api.hh_api.requests.get")
