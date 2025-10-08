@@ -1,4 +1,5 @@
-from unittest.mock import patch
+from typing import Any, Dict, List
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -6,18 +7,18 @@ from src.api.base_api import BaseAPI
 from src.api.hh_api import HeadHunterAPI
 
 
-def test_headhunterapi_issubclass():
+def test_headhunterapi_issubclass() -> None:
     """Проверяем, что класс HeadHunterAPI является подклассом класса BaseAPI"""
     assert issubclass(HeadHunterAPI, BaseAPI)
 
 
-def test_abstract_methods_have_been_implemented():
+def test_abstract_methods_have_been_implemented() -> None:
     """Проверяем, что абстрактные методы были реализованы"""
     methods = HeadHunterAPI.__abstractmethods__
     assert methods == frozenset()
 
 
-def test_hh_api_attributes_is_private():
+def test_hh_api_attributes_is_private() -> None:
     """Проверяем, что все атрибуты экземпляра класса HeadHunterAPI приватные"""
     hh_api_obj = HeadHunterAPI()
     attrs = [attr for attr in vars(hh_api_obj).keys() if not attr.startswith(f"_{hh_api_obj.__class__.__name__}__")]
@@ -25,7 +26,7 @@ def test_hh_api_attributes_is_private():
 
 
 @patch("src.api.hh_api.requests.get")
-def test_hh_api_object_init(mock_get, vacancies_list):
+def test_hh_api_object_init(mock_get: Mock, vacancies_list: Dict[str, List[Dict[str, Any]]]) -> None:
     """Тестируем работу метода get_vacancies"""
 
     mock_get.return_value.json.return_value = vacancies_list
@@ -41,7 +42,7 @@ def test_hh_api_object_init(mock_get, vacancies_list):
 
 
 @patch("src.api.hh_api.requests.get")
-def test_hh_api_status_code_check(mock_get, vacancies_list):
+def test_hh_api_status_code_check(mock_get: Mock, vacancies_list: Dict[str, List[Dict[str, Any]]]) -> None:
     """Проверяем, что при плохом статус-коде выбрасывается исключение"""
     mock_response = mock_get.return_value
     mock_response.status_code = 404
@@ -51,7 +52,7 @@ def test_hh_api_status_code_check(mock_get, vacancies_list):
 
 
 @patch("src.api.hh_api.requests.get")
-def test_hh_api_request_params(mock_get):
+def test_hh_api_request_params(mock_get: Mock) -> None:
     """Проверяем, что метод get_vacancies формирует параметры text и per_page"""
 
     # Настраиваем поведение мока

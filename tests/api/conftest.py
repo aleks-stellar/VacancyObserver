@@ -1,10 +1,12 @@
+from typing import cast, Any, Dict, List
+
 import pytest
 
 
 @pytest.fixture
-def vacancies_list():
+def vacancies_list() -> Dict[str, List[Dict[str, Any]]]:
     """Фикстура со списком ваканский из ключа items словаря - имитирует ответ сервера в формате JSON"""
-    return {
+    return cast(Dict[str, List[Dict[str, Any]]], {
         "items":
             [
                 {"id": "93353083", "premium": False, "name": "Тестировщик комфорта квартир", "department": None,
@@ -78,4 +80,4 @@ def vacancies_list():
         "fixes": None,
         "suggests": None,
         "alternate_url": "https://hh.ru/search/vacancy?enable_snippets=true"
-    }
+    })
