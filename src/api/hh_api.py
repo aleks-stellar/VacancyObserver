@@ -8,11 +8,7 @@ class HeadHunterAPI(BaseAPI):
     # URL для поиска вакансий на HeadHunter
     __URL = "https://api.hh.ru/vacancies"
 
-    def __init__(self):
-        """Метод инициализации"""
-        pass
-
-    def _send_request(self, text, per_page):
+    def _send_request(self, text: str, per_page: int):
         """Метод отправки POST-запроса на сервер API"""
         url = self.__URL
 
@@ -30,7 +26,7 @@ class HeadHunterAPI(BaseAPI):
         data = response.json()
         return data
 
-    def get_vacancies(self, keyword, vacancies_amount):
+    def get_vacancies(self, keyword: str, vacancies_amount: int):
         """Публичный метод для получения вакансий c HeadHunter"""
         data = self._send_request(keyword, vacancies_amount)["items"]
         return data
