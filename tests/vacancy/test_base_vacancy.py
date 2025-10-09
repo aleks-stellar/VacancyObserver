@@ -1,3 +1,7 @@
+import inspect
+
+import pytest
+
 from src.vacancy.base_vacancy import BaseVacancy
 
 
@@ -7,3 +11,10 @@ def test_base_vacancy_has_slots() -> None:
     slots = getattr(BaseVacancy, "__slots__")
     assert isinstance(slots, (tuple, list)), "__slots__ должен быть списком или кортежем"
     assert len(slots) > 0, "__slots__ должен содержать атрибуты"
+
+
+def test_vacancy_init_requires_four_arguments() -> None:
+    """Проверяем, что при инициализации объекта класса BaseVacancy требуется минимум 4 аргумента"""
+    signature = inspect.signature(BaseVacancy.__init__)
+    params_amount = len(signature.parameters) - 1
+    assert params_amount >= 4

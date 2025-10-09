@@ -1,11 +1,14 @@
 class BaseVacancy:
     """Класс для работы с вакансиями"""
 
-    __slots__ = ("title", "link", "salary", "brief_desc")  # title, link, salary, brief_desc
+    __slots__ = ("_title", "_link", "_salary", "_brief_desc")
 
     def __init__(self, title, link, salary, brief_desc):
         """Метод инициализации"""
-        pass
+        self._title = title
+        self._link = link
+        self._salary = salary
+        self._brief_desc = brief_desc
 
     @property
     def get_title(self):
