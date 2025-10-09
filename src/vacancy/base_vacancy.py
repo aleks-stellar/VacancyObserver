@@ -1,29 +1,29 @@
 class BaseVacancy:
     """Класс для работы с вакансиями"""
 
-    __slots__ = ()  # title, link, salary, brief_desc
+    __slots__ = ("title", "link", "salary", "brief_desc")  # title, link, salary, brief_desc
 
-    def __init__(self):
+    def __init__(self, title, link, salary, brief_desc):
         """Метод инициализации"""
         pass
 
     @property
-    def title(self):
+    def get_title(self):
         """Метод для доступа к защищенному атрибуту"""
         pass
 
     @property
-    def link(self):
+    def get_link(self):
         """Метод для доступа к защищенному атрибуту"""
         pass
 
     @property
-    def salary(self):
+    def get_salary(self):
         """Метод для доступа к защищенному атрибуту"""
         pass
 
     @property
-    def brief_desc(self):
+    def get_brief_desc(self):
         """Метод для доступа к защищенному атрибуту"""
         pass
 
