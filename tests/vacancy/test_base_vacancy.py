@@ -1,3 +1,9 @@
-def test_init():
-    """Тестирует инициализацию объекта класса BaseVacancy"""
-    pass
+from src.vacancy.base_vacancy import BaseVacancy
+
+
+def test_base_vacancy_has_slots() -> None:
+    """Проверяем, что в классе BaseVacancy используется __slots__"""
+    assert hasattr(BaseVacancy, "__slots__"), "В классе BaseVacancy отсутствует __slots__"
+    slots = getattr(BaseVacancy, "__slots__")
+    assert isinstance(slots, (tuple, list)), "__slots__ должен быть списком или кортежем"
+    assert len(slots) > 0, "__slots__ должен содержать атрибуты"
