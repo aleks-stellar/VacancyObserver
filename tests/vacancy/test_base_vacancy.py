@@ -18,18 +18,12 @@ def test_vacancy_init_requires_four_arguments() -> None:
     assert params_amount >= 4
 
 
-def test_get_title_method() -> None:
+def test_get_title_method(vac_1) -> None:
     """Проверяем, что метод get_title корректно возвращает защищенный атрибут"""
-    vac = BaseVacancy(
-        "Python Developer",
-        "<https://hh.ru/vacancy/123456>",
-        {"from": 350000, "to": 450000, "currency": "RUR", "gross": False},
-        "Требования: опыт работы от 3 лет..."
-    )
-    assert vac.get_title == "Python Developer"
-    assert vac.get_link == "<https://hh.ru/vacancy/123456>"
-    assert vac.get_salary == {"from": 350000, "to": 450000, "currency": "RUR", "gross": False}
-    assert vac.get_brief_desc == "Требования: опыт работы от 3 лет..."
+    assert vac_1.get_title == "Python Developer"
+    assert vac_1.get_link == "<https://hh.ru/vacancy/123456>"
+    assert vac_1.get_salary == {"from": 350000, "to": 450000, "currency": "RUR", "gross": False}
+    assert vac_1.get_brief_desc == "Требования: опыт работы от 3 лет..."
 
 
 def test_comparison_methods_is_magic() -> None:
