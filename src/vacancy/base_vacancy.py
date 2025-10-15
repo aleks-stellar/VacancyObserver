@@ -13,22 +13,22 @@ class BaseVacancy:
     @property
     def get_title(self):
         """Метод для доступа к защищенному атрибуту"""
-        pass
+        return
 
     @property
     def get_link(self):
         """Метод для доступа к защищенному атрибуту"""
-        pass
+        return
 
     @property
     def get_salary(self):
         """Метод для доступа к защищенному атрибуту"""
-        pass
+        return
 
     @property
     def get_brief_desc(self):
         """Метод для доступа к защищенному атрибуту"""
-        pass
+        return
 
     def _validate_title(self):
         """Метод валидации названия вакансии"""
