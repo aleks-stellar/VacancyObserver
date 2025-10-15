@@ -40,8 +40,18 @@ class BaseVacancy:
 
     def __gt__(self, other):
         """Метод сравнения"""
-        return self.get_salary
+        self_avg_salary = (self.salary["from"] + self.salary["to"]) / 2
+        other_avg_salary = (other.salary["from"] + other.salary["to"]) / 2
+        return self_avg_salary > other_avg_salary
 
     def __lt__(self, other):
         """Метод сравнения"""
-        pass
+        self_avg_salary = (self.salary["from"] + self.salary["to"]) / 2
+        other_avg_salary = (other.salary["from"] + other.salary["to"]) / 2
+        return self_avg_salary < other_avg_salary
+
+    def __eq__(self, other):
+        """Метод сравнения"""
+        self_avg_salary = (self.salary["from"] + self.salary["to"]) / 2
+        other_avg_salary = (other.salary["from"] + other.salary["to"]) / 2
+        return self_avg_salary == other_avg_salary

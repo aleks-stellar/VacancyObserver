@@ -1,5 +1,7 @@
 import inspect
 
+import pytest
+
 from src.vacancy.base_vacancy import BaseVacancy
 
 
@@ -20,10 +22,10 @@ def test_vacancy_init_requires_four_arguments() -> None:
 
 def test_get_title_method(vac_1) -> None:
     """Проверяем, что метод get_title корректно возвращает защищенный атрибут"""
-    assert vac_1.get_title == "Python Developer"
-    assert vac_1.get_link == "<https://hh.ru/vacancy/123456>"
-    assert vac_1.get_salary == {"from": 350000, "to": 450000, "currency": "RUR", "gross": False}
-    assert vac_1.get_brief_desc == "Требования: опыт работы от 3 лет..."
+    assert vac_1.title == "Python Developer"
+    assert vac_1.link == "<https://hh.ru/vacancy/123456>"
+    assert vac_1.salary == {"from": 350000, "to": 450000, "currency": "RUB", "gross": False}
+    assert vac_1.brief_desc == "Требования: опыт работы от 3 лет..."
 
 
 def test_comparison_methods_is_magic() -> None:
@@ -32,5 +34,22 @@ def test_comparison_methods_is_magic() -> None:
     assert hasattr(BaseVacancy, "__lt__"), "Метод __lt__ не реализован"
 
 
-def test_comparison_methods_is_implement() -> None:
-    """Проверяем, что в классе реализованы методы сравнения вакансий по зарплате"""
+def test_gt_method_is_implement(vac_1, vac_2) -> None:
+    """Проверяем, что в классе реализован метод сравнения вакансий по зарплате (__gt__)"""
+    assert vac_1 > vac_2
+    assert not vac_2 > vac_1
+    with pytest.raises(AssertionError):
+        assert vac_2 > vac_1
+
+
+def test_lt_method_is_implement(vac_1, vac_2) -> None:
+    """Проверяем, что в классе реализован метод сравнения вакансий по зарплате (__lt__)"""
+    assert vac_2 < vac_1
+    assert not vac_1 < vac_2
+    with pytest.raises(AssertionError):
+        assert vac_1 < vac_2
+
+
+def test_eq_method_is_implement(vac_1, vac_2) -> None:
+    """Проверяем, что в классе реализован метод сравнения вакансий по зарплате (__eq__)"""
+    assert not vac_1 == vac_2
