@@ -20,6 +20,6 @@ def vac_2() -> BaseVacancy:
     return BaseVacancy(
         "Web Developer",
         "<https://hh.ru/vacancy/123457>",
-        {"from": 390000, "to": 400000, "currency": "RUB", "gross": False},
+        {"from": 380000, "to": 400000, "currency": "RUB", "gross": False},
         "Требуется опытный веб-разработчик для создания сайта"
     )
