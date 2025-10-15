@@ -11,22 +11,22 @@ class BaseVacancy:
         self._brief_desc = brief_desc
 
     @property
-    def get_title(self):
+    def title(self):
         """Метод для доступа к защищенному атрибуту"""
         return self._title
 
     @property
-    def get_link(self):
+    def link(self):
         """Метод для доступа к защищенному атрибуту"""
         return self._link
 
     @property
-    def get_salary(self):
+    def salary(self):
         """Метод для доступа к защищенному атрибуту"""
         return self._salary
 
     @property
-    def get_brief_desc(self):
+    def brief_desc(self):
         """Метод для доступа к защищенному атрибуту"""
         return self._brief_desc
 
@@ -40,7 +40,7 @@ class BaseVacancy:
 
     def __gt__(self, other):
         """Метод сравнения"""
-        pass
+        return self.get_salary
 
     def __lt__(self, other):
         """Метод сравнения"""
