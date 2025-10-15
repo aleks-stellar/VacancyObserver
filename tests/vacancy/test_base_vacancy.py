@@ -30,3 +30,9 @@ def test_get_title_method() -> None:
     assert vac.get_link == "<https://hh.ru/vacancy/123456>"
     assert vac.get_salary == "100 000-150 000 руб."
     assert vac.get_brief_desc == "Требования: опыт работы от 3 лет..."
+
+
+def test_comparison_methods_is_magic() -> None:
+    """Проверяем, что методы сравнения магические"""
+    assert hasattr(BaseVacancy, "__gt__"), "Метод __gt__ не реализован"
+    assert hasattr(BaseVacancy, "__lt__"), "Метод __lt__ не реализован"
