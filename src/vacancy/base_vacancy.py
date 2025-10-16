@@ -41,7 +41,7 @@ class BaseVacancy:
     def __gt__(self, other):
         """Метод сравнения"""
         if not isinstance(other, BaseVacancy):
-            raise TypeError
+            raise TypeError("Можно сравнивать только объекты класса BaseVacancy")
         self_avg_salary = (self.salary["from"] + self.salary["to"]) / 2
         other_avg_salary = (other.salary["from"] + other.salary["to"]) / 2
         return self_avg_salary > other_avg_salary
@@ -49,7 +49,7 @@ class BaseVacancy:
     def __lt__(self, other):
         """Метод сравнения"""
         if not isinstance(other, BaseVacancy):
-            raise TypeError
+            raise TypeError("Можно сравнивать только объекты класса BaseVacancy")
         self_avg_salary = (self.salary["from"] + self.salary["to"]) / 2
         other_avg_salary = (other.salary["from"] + other.salary["to"]) / 2
         return self_avg_salary < other_avg_salary
@@ -57,7 +57,7 @@ class BaseVacancy:
     def __eq__(self, other):
         """Метод сравнения"""
         if not isinstance(other, BaseVacancy):
-            raise TypeError
+            raise TypeError("Можно сравнивать только объекты класса BaseVacancy")
         self_avg_salary = (self.salary["from"] + self.salary["to"]) / 2
         other_avg_salary = (other.salary["from"] + other.salary["to"]) / 2
         return self_avg_salary == other_avg_salary

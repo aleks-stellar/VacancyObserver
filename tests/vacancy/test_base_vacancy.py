@@ -53,18 +53,20 @@ def test_eq_method_is_implement(vac_1, vac_2) -> None:
 
 def test_gt_method_with_not_base_vacancy_object(vac_1) -> None:
     """Проверяем, что метод сравнения выдаст ошибку TypeError при попытке сравнить не с объектом класса BaseVacancy"""
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError) as e:
         _ = vac_1 > 100000.0
-
+    assert str(e.value) == "Можно сравнивать только объекты класса BaseVacancy"
 
 
 def test_lt_method_with_not_base_vacancy_object(vac_1) -> None:
     """Проверяем, что метод сравнения выдаст ошибку TypeError при попытке сравнить не с объектом класса BaseVacancy"""
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError) as e:
         _ = not vac_1 < 100000.0
+    assert str(e.value) == "Можно сравнивать только объекты класса BaseVacancy"
 
 
 def test_eq_method_with_not_base_vacancy_object(vac_1) -> None:
     """Проверяем, что метод сравнения выдаст ошибку TypeError при попытке сравнить не с объектом класса BaseVacancy"""
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError) as e:
         _ = not vac_1 == 100000.0
+    assert str(e.value) == "Можно сравнивать только объекты класса BaseVacancy"
