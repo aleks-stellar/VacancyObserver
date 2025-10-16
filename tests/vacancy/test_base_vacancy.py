@@ -38,16 +38,12 @@ def test_gt_method_is_implement(vac_1, vac_2) -> None:
     """Проверяем, что в классе реализован метод сравнения вакансий по зарплате (__gt__)"""
     assert vac_1 > vac_2
     assert not vac_2 > vac_1
-    with pytest.raises(AssertionError):
-        assert vac_2 > vac_1
 
 
 def test_lt_method_is_implement(vac_1, vac_2) -> None:
     """Проверяем, что в классе реализован метод сравнения вакансий по зарплате (__lt__)"""
     assert vac_2 < vac_1
     assert not vac_1 < vac_2
-    with pytest.raises(AssertionError):
-        assert vac_1 < vac_2
 
 
 def test_eq_method_is_implement(vac_1, vac_2) -> None:
@@ -58,16 +54,17 @@ def test_eq_method_is_implement(vac_1, vac_2) -> None:
 def test_gt_method_with_not_base_vacancy_object(vac_1) -> None:
     """Проверяем, что метод сравнения выдаст ошибку TypeError при попытке сравнить не с объектом класса BaseVacancy"""
     with pytest.raises(TypeError):
-        assert vac_1 > 100000.0
+        _ = vac_1 > 100000.0
+
 
 
 def test_lt_method_with_not_base_vacancy_object(vac_1) -> None:
     """Проверяем, что метод сравнения выдаст ошибку TypeError при попытке сравнить не с объектом класса BaseVacancy"""
     with pytest.raises(TypeError):
-        assert not vac_1 < 100000.0
+        _ = not vac_1 < 100000.0
 
 
 def test_eq_method_with_not_base_vacancy_object(vac_1) -> None:
     """Проверяем, что метод сравнения выдаст ошибку TypeError при попытке сравнить не с объектом класса BaseVacancy"""
     with pytest.raises(TypeError):
-        assert not vac_1 == 100000.0
+        _ = not vac_1 == 100000.0
