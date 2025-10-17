@@ -70,3 +70,24 @@ def test_eq_method_with_not_base_vacancy_object(vac_1) -> None:
     with pytest.raises(TypeError) as e:
         _ = not vac_1 == 100000.0
     assert str(e.value) == "Можно сравнивать только объекты класса BaseVacancy"
+
+
+def test_validation_title_during_init() -> None:
+    """Проверяем, что при инициализации объекта происходит валидация по названию"""
+    vacancy = BaseVacancy("", "", {
+        "from": 380000, "to": 400000, "currency": "RUB", "gross": False
+    }, "")
+
+    assert vacancy.title == "Название не указано"
+
+    vacancy = BaseVacancy("  ", "", {
+        "from": 380000, "to": 400000, "currency": "RUB", "gross": False
+    }, "")
+
+    assert vacancy.title == "Название не указано"
+
+
+def test_validation_salary_during_init() -> None:
+    """Проверяем, что при инициализации объекта происходит валидация по зарплате"""
+    vacancy = BaseVacancy("", "", {}, "")
+    assert vacancy.salary == 0

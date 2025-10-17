@@ -13,7 +13,7 @@ class BaseVacancy:
     @property
     def title(self):
         """Метод для доступа к защищенному атрибуту"""
-        return self._title
+        return self._validate_title()
 
     @property
     def link(self):
@@ -23,7 +23,7 @@ class BaseVacancy:
     @property
     def salary(self):
         """Метод для доступа к защищенному атрибуту"""
-        return self._salary
+        return self._validate_salary()
 
     @property
     def brief_desc(self):
@@ -32,11 +32,15 @@ class BaseVacancy:
 
     def _validate_title(self):
         """Метод валидации названия вакансии"""
-        pass
+        if not self._title.strip():
+            return "Название не указано"
+        return self._title
 
     def _validate_salary(self):
         """Метод валидации зарплаты"""
-        pass
+        if not self._salary:
+            return 0
+        return self._salary
 
     def __gt__(self, other):
         """Метод сравнения"""
