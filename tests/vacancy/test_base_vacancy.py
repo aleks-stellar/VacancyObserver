@@ -90,4 +90,4 @@ def test_validation_title_during_init() -> None:
 def test_validation_salary_during_init() -> None:
     """Проверяем, что при инициализации объекта происходит валидация по зарплате"""
     vacancy = BaseVacancy("", "", {}, "")
-    assert vacancy.salary == 0
+    assert vacancy.salary == {"from": 0, "to": 0, "currency": "", "gross": False}
