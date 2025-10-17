@@ -1,9 +1,12 @@
+from typing import Dict, Union
+
+
 class BaseVacancy:
     """Класс для работы с вакансиями"""
 
     __slots__ = ("_title", "_link", "_salary", "_brief_desc")
 
-    def __init__(self, title, link, salary, brief_desc):
+    def __init__(self, title: str, link: str, salary: Dict[str, Union[str, int, bool]], brief_desc: str) -> None:
         """Метод инициализации"""
         self._title = self._validate_title(title)
         self._link = link
@@ -11,59 +14,59 @@ class BaseVacancy:
         self._brief_desc = brief_desc
 
     @property
-    def title(self):
+    def title(self) -> str:
         """Метод для доступа к защищенному атрибуту"""
         return self._title
 
     @property
-    def link(self):
+    def link(self) -> str:
         """Метод для доступа к защищенному атрибуту"""
         return self._link
 
     @property
-    def salary(self):
+    def salary(self) -> Dict[str, Union[str, int, bool]]:
         """Метод для доступа к защищенному атрибуту"""
         return self._salary
 
     @property
-    def brief_desc(self):
+    def brief_desc(self) -> str:
         """Метод для доступа к защищенному атрибуту"""
         return self._brief_desc
 
     @staticmethod
-    def _validate_title(headline):
+    def _validate_title(headline: str) -> str:
         """Метод валидации названия вакансии"""
         if not headline.strip():
             return "Название не указано"
         return headline
 
     @staticmethod
-    def _validate_salary(wage):
+    def _validate_salary(wage: Dict[str, Union[str, int, bool]]) -> Dict[str, Union[str, int, bool]]:
         """Метод валидации зарплаты"""
         if not wage:
-            return 0
+            return {"from": 0, "to": 0, "currency": "", "gross": False}
         return wage
 
-    def __gt__(self, other):
+    def __gt__(self, other: object) -> bool:
         """Метод сравнения"""
         if not isinstance(other, BaseVacancy):
             raise TypeError("Можно сравнивать только объекты класса BaseVacancy")
-        self_avg_salary = (self.salary["from"] + self.salary["to"]) / 2
-        other_avg_salary = (other.salary["from"] + other.salary["to"]) / 2
+        self_avg_salary = (float(self.salary["from"]) + float(self.salary["to"])) / 2
+        other_avg_salary = (float(other.salary["from"]) + float(other.salary["to"])) / 2
         return self_avg_salary > other_avg_salary
 
-    def __lt__(self, other):
+    def __lt__(self, other: object) -> bool:
         """Метод сравнения"""
         if not isinstance(other, BaseVacancy):
             raise TypeError("Можно сравнивать только объекты класса BaseVacancy")
-        self_avg_salary = (self.salary["from"] + self.salary["to"]) / 2
-        other_avg_salary = (other.salary["from"] + other.salary["to"]) / 2
+        self_avg_salary = (float(self.salary["from"]) + float(self.salary["to"])) / 2
+        other_avg_salary = (float(other.salary["from"]) + float(other.salary["to"])) / 2
         return self_avg_salary < other_avg_salary
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         """Метод сравнения"""
         if not isinstance(other, BaseVacancy):
             raise TypeError("Можно сравнивать только объекты класса BaseVacancy")
-        self_avg_salary = (self.salary["from"] + self.salary["to"]) / 2
-        other_avg_salary = (other.salary["from"] + other.salary["to"]) / 2
+        self_avg_salary = (float(self.salary["from"]) + float(self.salary["to"])) / 2
+        other_avg_salary = (float(other.salary["from"]) + float(other.salary["to"])) / 2
         return self_avg_salary == other_avg_salary
