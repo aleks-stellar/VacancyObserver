@@ -20,7 +20,7 @@ def test_vacancy_init_requires_four_arguments() -> None:
     assert params_amount >= 4
 
 
-def test_get_title_method(vac_1) -> None:
+def test_get_title_method(vac_1: BaseVacancy) -> None:
     """Проверяем, что метод get_title корректно возвращает защищенный атрибут"""
     assert vac_1.title == "Python Developer"
     assert vac_1.link == "<https://hh.ru/vacancy/123456>"
@@ -34,38 +34,38 @@ def test_comparison_methods_is_magic() -> None:
     assert hasattr(BaseVacancy, "__lt__"), "Метод __lt__ не реализован"
 
 
-def test_gt_method_is_implement(vac_1, vac_2) -> None:
+def test_gt_method_is_implement(vac_1: BaseVacancy, vac_2: BaseVacancy) -> None:
     """Проверяем, что в классе реализован метод сравнения вакансий по зарплате (__gt__)"""
     assert vac_1 > vac_2
     assert not vac_2 > vac_1
 
 
-def test_lt_method_is_implement(vac_1, vac_2) -> None:
+def test_lt_method_is_implement(vac_1: BaseVacancy, vac_2: BaseVacancy) -> None:
     """Проверяем, что в классе реализован метод сравнения вакансий по зарплате (__lt__)"""
     assert vac_2 < vac_1
     assert not vac_1 < vac_2
 
 
-def test_eq_method_is_implement(vac_1, vac_2) -> None:
+def test_eq_method_is_implement(vac_1: BaseVacancy, vac_2: BaseVacancy) -> None:
     """Проверяем, что в классе реализован метод сравнения вакансий по зарплате (__eq__)"""
     assert not vac_1 == vac_2
 
 
-def test_gt_method_with_not_base_vacancy_object(vac_1) -> None:
+def test_gt_method_with_not_base_vacancy_object(vac_1: BaseVacancy) -> None:
     """Проверяем, что метод сравнения выдаст ошибку TypeError при попытке сравнить не с объектом класса BaseVacancy"""
     with pytest.raises(TypeError) as e:
         _ = vac_1 > 100000.0
     assert str(e.value) == "Можно сравнивать только объекты класса BaseVacancy"
 
 
-def test_lt_method_with_not_base_vacancy_object(vac_1) -> None:
+def test_lt_method_with_not_base_vacancy_object(vac_1: BaseVacancy) -> None:
     """Проверяем, что метод сравнения выдаст ошибку TypeError при попытке сравнить не с объектом класса BaseVacancy"""
     with pytest.raises(TypeError) as e:
         _ = not vac_1 < 100000.0
     assert str(e.value) == "Можно сравнивать только объекты класса BaseVacancy"
 
 
-def test_eq_method_with_not_base_vacancy_object(vac_1) -> None:
+def test_eq_method_with_not_base_vacancy_object(vac_1: BaseVacancy) -> None:
     """Проверяем, что метод сравнения выдаст ошибку TypeError при попытке сравнить не с объектом класса BaseVacancy"""
     with pytest.raises(TypeError) as e:
         _ = not vac_1 == 100000.0
