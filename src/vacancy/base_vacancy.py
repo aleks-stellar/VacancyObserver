@@ -5,15 +5,15 @@ class BaseVacancy:
 
     def __init__(self, title, link, salary, brief_desc):
         """Метод инициализации"""
-        self._title = title
+        self._title = self._validate_title(title)
         self._link = link
-        self._salary = salary
+        self._salary = self._validate_salary(salary)
         self._brief_desc = brief_desc
 
     @property
     def title(self):
         """Метод для доступа к защищенному атрибуту"""
-        return self._validate_title()
+        return self._title
 
     @property
     def link(self):
@@ -23,24 +23,26 @@ class BaseVacancy:
     @property
     def salary(self):
         """Метод для доступа к защищенному атрибуту"""
-        return self._validate_salary()
+        return self._salary
 
     @property
     def brief_desc(self):
         """Метод для доступа к защищенному атрибуту"""
         return self._brief_desc
 
-    def _validate_title(self):
+    @staticmethod
+    def _validate_title(headline):
         """Метод валидации названия вакансии"""
-        if not self._title.strip():
+        if not headline.strip():
             return "Название не указано"
-        return self._title
+        return headline
 
-    def _validate_salary(self):
+    @staticmethod
+    def _validate_salary(wage):
         """Метод валидации зарплаты"""
-        if not self._salary:
+        if not wage:
             return 0
-        return self._salary
+        return wage
 
     def __gt__(self, other):
         """Метод сравнения"""
