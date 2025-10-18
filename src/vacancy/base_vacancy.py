@@ -47,6 +47,10 @@ class BaseVacancy:
             return {"from": 0, "to": 0, "currency": "", "gross": False}
         return wage
 
+    def get_vacancy(self):
+        """Метод для получения вакансий в формате, соответствующем атрибутам класса"""
+        pass
+
     def __gt__(self, other: object) -> bool:
         """Метод сравнения"""
         if not isinstance(other, BaseVacancy):
