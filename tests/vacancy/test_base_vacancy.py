@@ -91,3 +91,15 @@ def test_validation_salary_during_init() -> None:
     """Проверяем, что при инициализации объекта происходит валидация по зарплате"""
     vacancy = BaseVacancy("", "", {}, "")
     assert vacancy.salary == {"from": 0, "to": 0, "currency": "", "gross": False}
+
+
+def test_result_vacancy(vac_1: BaseVacancy) -> None:
+    """Проверяем, что объекты класса могут возвращать информацию о вакансиях в правильном формате"""
+    result = vac_1.get_vacancy()
+    expected_result = {
+        "name": "Python Developer",
+        "alternate_url": "<https://hh.ru/vacancy/123456>",
+        "salary": {"from": 350000, "to": 450000, "currency": "RUB", "gross": False},
+        "requirement": "Требования: опыт работы от 3 лет..."
+    }
+    assert result == expected_result

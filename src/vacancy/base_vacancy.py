@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Any, Dict, Union
 
 
 class BaseVacancy:
@@ -47,9 +47,14 @@ class BaseVacancy:
             return {"from": 0, "to": 0, "currency": "", "gross": False}
         return wage
 
-    def get_vacancy(self):
+    def get_vacancy(self) -> Dict[str, Any]:
         """Метод для получения вакансий в формате, соответствующем атрибутам класса"""
-        pass
+        return {
+            "name": self.title,
+            "alternate_url": self.link,
+            "salary": self.salary,
+            "requirement": self.brief_desc
+        }
 
     def __gt__(self, other: object) -> bool:
         """Метод сравнения"""
