@@ -16,6 +16,9 @@ def test_file_worker_has_abstract_methods() -> None:
     assert "get_vacancy_data" in abstract_methods
     assert "add_vacancy_data" in abstract_methods
     assert "delete_vacancy_data" in abstract_methods
+    assert "full_path" in abstract_methods
+    assert "_validate_path" in abstract_methods
+    assert "_validate_name" in abstract_methods
 
 
 def test_file_worker_cannot_be_instantiated() -> None:
