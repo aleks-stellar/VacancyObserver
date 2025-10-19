@@ -24,10 +24,7 @@ class JSONWorker(FileWorker):
         data = []
         if self.__full_path.exists():
             with open(self.__full_path, "r", encoding="utf-8") as f:
-                try:
-                    data = json.load(f)
-                except json.JSONDecodeError:
-                    data = []
+                data = json.load(f)
 
         data.append(vacancy)
 
