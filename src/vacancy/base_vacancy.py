@@ -1,10 +1,12 @@
 from typing import Any, Dict, Union
 
+from src.utils.logger_worker import LoggerWorker
+
 
 class BaseVacancy:
     """Класс для работы с вакансиями"""
 
-    __slots__ = ("_title", "_link", "_salary", "_brief_desc")
+    __slots__ = ("_title", "_link", "_salary", "_brief_desc", "_logger")
 
     def __init__(self, title: str, link: str, salary: Dict[str, Union[str, int, bool]], brief_desc: str) -> None:
         """Метод инициализации"""
@@ -12,6 +14,15 @@ class BaseVacancy:
         self._link = link
         self._salary = self._validate_salary(salary)
         self._brief_desc = brief_desc
+
+        # Инициализация логгера
+        self._logger = LoggerWorker()
+        self.logger.info(f"Создана вакансия: {self._title}")
+
+    @property
+    def logger(self) -> LoggerWorker:
+        """Возвращает экземпляр логгера"""
+        return self._logger
 
     @property
     def title(self) -> str:
