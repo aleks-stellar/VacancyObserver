@@ -15,7 +15,7 @@ class FileWorker(ABC):
         pass
 
     @abstractmethod
-    def delete_vacancy_data(self):
+    def delete_vacancy_data(self, vacancy_id: int):
         """Метод для удаления данных о вакансиях из файла"""
         pass
 
