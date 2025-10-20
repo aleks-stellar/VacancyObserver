@@ -1,5 +1,6 @@
 import json
 
+from src.utils.logger_worker import LoggerWorker
 from src.connector.file_worker import FileWorker
 import pathlib
 
@@ -15,6 +16,7 @@ class JSONWorker(FileWorker):
         self.__path = self._validate_path(path)
         self.__file_name = self._validate_name(file_name)
         self.__full_path = self.__path / self.__file_name
+        self.logger = LoggerWorker()
 
     def get_vacancy_data(self):
         """Метод для получения данных о вакансиях из JSON-файла"""
@@ -29,14 +31,28 @@ class JSONWorker(FileWorker):
         vacancies = self.get_vacancy_data()
         if not any(vac["alternate_url"] == vacancy["alternate_url"] for vac in vacancies):
             vacancies.append(vacancy)
+            self.logger.info(f"Добавлена новая вакансия: {vacancy["name"]}")
         self._write_to_file(vacancies)
 
     def delete_vacancy_data(self, vacancy_id):
         """Метод для удаления данных о вакансиях из JSON-файла"""
         data = self.get_vacancy_data()
         link = self.__LINK_FOR_VACANCY + str(vacancy_id)
-        data = [vac for vac in data if vac["alternate_url"] != link]
-        self._write_to_file(data)
+        # data = [vac for vac in data if vac["alternate_url"] != link]
+        data_without_vacancy = []
+        vacancy_was_deleted = None
+        for vac in data:
+            if vac["alternate_url"] != link:
+                data_without_vacancy.append(vac)
+            else:
+                vacancy_was_deleted = vac
+
+        self._write_to_file(data_without_vacancy)
+
+        if vacancy_was_deleted:
+            self.logger.info(f"Удалена вакансия: {vacancy_was_deleted['name']}")
+        else:
+            self.logger.warning(f"Попытка удалить несуществующую вакансию с ID {vacancy_id}")
 
     @property
     def full_path(self):
