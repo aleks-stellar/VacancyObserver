@@ -19,22 +19,23 @@ class JSONWorker(FileWorker):
 
     def get_vacancy_data(self):
         """Метод для получения данных о вакансиях из JSON-файла"""
-        pass
+        if not self.__full_path.exists() or self.full_path.stat().st_size == 0:
+            return []
+        with open(self.__full_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
 
     def add_vacancy_data(self, vacancy):
         """Метод для добавления данных о вакансиях в JSON-файл"""
-        data = []
-        if self.__full_path.exists():
-            with open(self.__full_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
+        vacancies = self.get_vacancy_data()
         counter = 0
-        for vac in data:
+        for vac in vacancies:
             if vac["alternate_url"] == vacancy["alternate_url"]:
                 counter += 1
         if counter == 0:
-            data.append(vacancy)
+            vacancies.append(vacancy)
         with open(self.__full_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+            json.dump(vacancies, f, ensure_ascii=False, indent=4)
 
     def delete_vacancy_data(self):
         """Метод для удаления данных о вакансиях из JSON-файла"""
