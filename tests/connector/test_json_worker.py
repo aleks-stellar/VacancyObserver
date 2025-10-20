@@ -123,7 +123,7 @@ def test_delete_vacancy(tmp_path, vacancy_data1, vacancy_data2) -> None:
 def test_delete_method_from_empty_file(tmp_path) -> None:
     """Проверяем корректность работы метода при попытке удалить вакансию из пустого файла"""
     worker = JSONWorker(path=tmp_path)
+    worker.full_path.touch()
     worker.delete_vacancy_data(123456)
 
     assert worker.get_vacancy_data() == []
-    assert worker.
