@@ -1,4 +1,6 @@
 import json
+from itertools import count
+from multiprocessing.pool import worker
 
 from src.connector.file_worker import FileWorker
 import pathlib
@@ -25,9 +27,12 @@ class JSONWorker(FileWorker):
         if self.__full_path.exists():
             with open(self.__full_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-
-        data.append(vacancy)
-
+        counter = 0
+        for vac in data:
+            if vac["alternate_url"] == vacancy["alternate_url"]:
+                counter += 1
+        if counter == 0:
+            data.append(vacancy)
         with open(self.__full_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
 

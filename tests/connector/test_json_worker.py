@@ -66,3 +66,21 @@ def test_add_two_vacancies_data(
     assert len(data) == 2
     assert data[0]["name"] == "Python Developer"
     assert data[1]["name"] == "Web Developer"
+
+
+def test_check_for_duplicates(
+        tmp_path,
+        vacancy_data1: Dict[str, str | Dict]
+) -> None:
+    """Проверяем, что JSON-файл не сохраняем дубли вакансий"""
+    worker = JSONWorker(path=tmp_path)
+
+    worker.add_vacancy_data(vacancy_data1)
+    worker.add_vacancy_data(vacancy_data1)
+
+    with open(worker.full_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    assert isinstance(data, list)
+    assert len(data) == 1
+    assert data[0]["name"] == "Python Developer"
