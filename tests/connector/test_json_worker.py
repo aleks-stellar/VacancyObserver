@@ -5,22 +5,25 @@ from typing import Dict
 from src.connector.json_worker import JSONWorker
 
 
-def test_init_and_validation() -> None:
+def test_init_and_validation(tmp_path) -> None:
     """Тестируем инициализацию объектов класса JSONWorker а также валидацию пути и имени внутри инициализации"""
-    worker = JSONWorker()
-    assert worker.full_path == pathlib.Path(__file__).parent.parent.parent / "data" / "vacancies.json"
+    default_path = tmp_path / "data"
+    worker = JSONWorker(path=default_path)
+    assert worker.full_path == default_path / "vacancies.json"
 
-    worker = JSONWorker(file_name="vacancies_data")
-    assert worker.full_path == pathlib.Path(__file__).parent.parent.parent / "data" / "vacancies_data.json"
+    worker = JSONWorker(path=tmp_path, file_name="vacancies_data")
+    assert worker.full_path == tmp_path / "vacancies_data.json"
 
-    worker = JSONWorker(path="Python/VacancyObserver")
-    assert worker.full_path == pathlib.Path("Python/VacancyObserver/vacancies.json")
+    nested_path = tmp_path / "Python" / "VacancyObserver"
+    worker = JSONWorker(path=nested_path)
+    assert worker.full_path == nested_path / "vacancies.json"
 
-    worker = JSONWorker(path="Python/VacancyObserver", file_name="data.json")
-    assert worker.full_path == pathlib.Path("Python/VacancyObserver/data.json")
+    worker = JSONWorker(path=nested_path, file_name="data.json")
+    assert worker.full_path == nested_path / "data.json"
 
-    worker = JSONWorker(path="Python/Vacancy", file_name="data.json")
-    assert worker.full_path == pathlib.Path("Python/Vacancy/data.json")
+    another_path = tmp_path / "Python" / "Vacancy"
+    worker = JSONWorker(path=another_path, file_name="data.json")
+    assert worker.full_path == another_path / "data.json"
 
 
 def test_add_vacancy_data(tmp_path, vacancy_data1: Dict[str, str | Dict]) -> None:
