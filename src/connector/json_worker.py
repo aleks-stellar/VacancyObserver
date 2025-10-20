@@ -1,8 +1,8 @@
 import json
-
-from src.utils.logger_worker import LoggerWorker
-from src.connector.file_worker import FileWorker
 import pathlib
+
+from src.connector.file_worker import FileWorker
+from src.utils.logger_worker import LoggerWorker
 
 
 class JSONWorker(FileWorker):
