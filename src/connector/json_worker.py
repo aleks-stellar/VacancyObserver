@@ -1,5 +1,6 @@
 import json
 import pathlib
+from typing import Dict, List, Optional
 
 from src.connector.file_worker import FileWorker
 from src.utils.logger_worker import LoggerWorker
@@ -11,36 +12,36 @@ class JSONWorker(FileWorker):
     __DEFAULT_NAME = "vacancies.json"
     __LINK_FOR_VACANCY = "https://hh.ru/vacancy/"
 
-    def __init__(self, path=None, file_name=None):
+    def __init__(self, path: Optional[str] = None, file_name: Optional[str] = None) -> None:
         """Метод для инициализации"""
-        self.__path = self._validate_path(path)
-        self.__file_name = self._validate_name(file_name)
-        self.__full_path = self.__path / self.__file_name
-        self.logger = LoggerWorker()
+        self.__path: pathlib.Path = self._validate_path(path)
+        self.__file_name: str = self._validate_name(file_name)
+        self.__full_path: pathlib.Path = self.__path / self.__file_name
+        self.logger: LoggerWorker = LoggerWorker()
 
-    def get_vacancy_data(self):
+    def get_vacancy_data(self) -> List[Dict]:
         """Метод для получения данных о вакансиях из JSON-файла"""
         if not self.__full_path.exists() or self.full_path.stat().st_size == 0:
             return []
         with open(self.__full_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
+            data: List[Dict] = json.load(f)
         return data
 
-    def add_vacancy_data(self, vacancy):
+    def add_vacancy_data(self, vacancy: Dict) -> None:
         """Метод для добавления данных о вакансиях в JSON-файл"""
-        vacancies = self.get_vacancy_data()
+        vacancies: List[Dict] = self.get_vacancy_data()
         if not any(vac["alternate_url"] == vacancy["alternate_url"] for vac in vacancies):
             vacancies.append(vacancy)
-            self.logger.info(f"Добавлена новая вакансия: {vacancy["name"]}")
+            self.logger.info(f"Добавлена новая вакансия: {vacancy['name']}")
         self._write_to_file(vacancies)
 
-    def delete_vacancy_data(self, vacancy_id):
+    def delete_vacancy_data(self, vacancy_id: int) -> None:
         """Метод для удаления данных о вакансиях из JSON-файла"""
-        data = self.get_vacancy_data()
+        data: List[Dict] = self.get_vacancy_data()
         link = self.__LINK_FOR_VACANCY + str(vacancy_id)
-        # data = [vac for vac in data if vac["alternate_url"] != link]
-        data_without_vacancy = []
-        vacancy_was_deleted = None
+        data_without_vacancy: List[Dict] = []
+        vacancy_was_deleted: Optional[Dict] = None
+
         for vac in data:
             if vac["alternate_url"] != link:
                 data_without_vacancy.append(vac)
@@ -55,23 +56,23 @@ class JSONWorker(FileWorker):
             self.logger.warning(f"Попытка удалить несуществующую вакансию с ID {vacancy_id}")
 
     @property
-    def full_path(self):
+    def full_path(self) -> pathlib.Path:
         return self.__full_path
 
-    def _validate_path(self, path_to_f):
+    def _validate_path(self, path_to_f: Optional[str]) -> pathlib.Path:
         """Метод валидации пути к файлу"""
-        candidate = pathlib.Path(path_to_f) if path_to_f else self.__DEFAULT_PATH
+        candidate: pathlib.Path = pathlib.Path(path_to_f) if path_to_f else self.__DEFAULT_PATH
         if not candidate.exists():
             candidate.mkdir(parents=True, exist_ok=True)
         return candidate
 
-    def _validate_name(self, f_name):
+    def _validate_name(self, f_name: Optional[str]) -> str:
         """Метод валидации имени файла"""
         if f_name:
             return str(f_name) if str(f_name).endswith(".json") else str(f_name) + ".json"
         return self.__DEFAULT_NAME
 
-    def _write_to_file(self, data):
+    def _write_to_file(self, data: List[Dict]) -> None:
         """Метод для записи вакансий в JSON-файл"""
         with open(self.__full_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)

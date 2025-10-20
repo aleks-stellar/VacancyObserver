@@ -8,7 +8,7 @@ class LoggerWorker:
             self,
             log_dir: Path = Path(__file__).parent.parent.parent / "logs",
             log_file: str = "app.log",
-            level=logging.INFO
+            level: int = logging.INFO
     ) -> None:
         self.log_dir = log_dir
         self.log_dir.mkdir(parents=True, exist_ok=True)
@@ -35,22 +35,22 @@ class LoggerWorker:
             console_handler.setFormatter(formatter)
             self.logger.addHandler(console_handler)
 
-    def debug(self, message: str):
+    def debug(self, message: str) -> None:
         """Метод для уровня логгирования DEBUG"""
         self.logger.debug(message)
 
-    def info(self, message: str):
+    def info(self, message: str) -> None:
         """Метод для уровня логгирования INFO"""
         self.logger.info(message)
 
-    def warning(self, message: str):
+    def warning(self, message: str) -> None:
         """Метод для уровня логгирования WARNING"""
         self.logger.warning(message)
 
-    def error(self, message: str):
+    def error(self, message: str) -> None:
         """Метод для уровня логгирования ERROR"""
         self.logger.error(message)
 
-    def critical(self, message: str):
+    def critical(self, message: str) -> None:
         """Метод для уровня логгирования CRITICAL"""
         self.logger.critical(message)
