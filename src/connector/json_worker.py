@@ -1,6 +1,4 @@
 import json
-from itertools import count
-from multiprocessing.pool import worker
 
 from src.connector.file_worker import FileWorker
 import pathlib
@@ -8,8 +6,9 @@ import pathlib
 
 class JSONWorker(FileWorker):
     """Класс для работы чтения, записи и удаления информации о вакансиях из JSON-файла"""
-    DEFAULT_PATH = pathlib.Path(__file__).parent.parent.parent / "data"
-    DEFAULT_NAME = "vacancies.json"
+    __DEFAULT_PATH = pathlib.Path(__file__).parent.parent.parent / "data"
+    __DEFAULT_NAME = "vacancies.json"
+    __LINK_FOR_VACANCY = "https://hh.ru/vacancy/"
 
     def __init__(self, path=None, file_name=None):
         """Метод для инициализации"""
@@ -28,18 +27,16 @@ class JSONWorker(FileWorker):
     def add_vacancy_data(self, vacancy):
         """Метод для добавления данных о вакансиях в JSON-файл"""
         vacancies = self.get_vacancy_data()
-        counter = 0
-        for vac in vacancies:
-            if vac["alternate_url"] == vacancy["alternate_url"]:
-                counter += 1
-        if counter == 0:
+        if not any(vac["alternate_url"] == vacancy["alternate_url"] for vac in vacancies):
             vacancies.append(vacancy)
-        with open(self.__full_path, "w", encoding="utf-8") as f:
-            json.dump(vacancies, f, ensure_ascii=False, indent=4)
+        self._write_to_file(vacancies)
 
-    def delete_vacancy_data(self):
+    def delete_vacancy_data(self, vacancy_id):
         """Метод для удаления данных о вакансиях из JSON-файла"""
-        pass
+        data = self.get_vacancy_data()
+        link = self.__LINK_FOR_VACANCY + str(vacancy_id)
+        data = [vac for vac in data if vac["alternate_url"] != link]
+        self._write_to_file(data)
 
     @property
     def full_path(self):
@@ -47,7 +44,7 @@ class JSONWorker(FileWorker):
 
     def _validate_path(self, path_to_f):
         """Метод валидации пути к файлу"""
-        candidate = pathlib.Path(path_to_f) if path_to_f else self.DEFAULT_PATH
+        candidate = pathlib.Path(path_to_f) if path_to_f else self.__DEFAULT_PATH
         if not candidate.exists():
             candidate.mkdir(parents=True, exist_ok=True)
         return candidate
@@ -56,4 +53,9 @@ class JSONWorker(FileWorker):
         """Метод валидации имени файла"""
         if f_name:
             return str(f_name) if str(f_name).endswith(".json") else str(f_name) + ".json"
-        return self.DEFAULT_NAME
+        return self.__DEFAULT_NAME
+
+    def _write_to_file(self, data):
+        """Метод для записи вакансий в JSON-файл"""
+        with open(self.__full_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)

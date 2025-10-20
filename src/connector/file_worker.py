@@ -33,3 +33,8 @@ class FileWorker(ABC):
     def _validate_name(self, f_name):
         """Метод валидации имени файла"""
         pass
+
+    @abstractmethod
+    def _write_to_file(self, data):
+        """Метод для записи вакансий в JSON-файл"""
+        pass

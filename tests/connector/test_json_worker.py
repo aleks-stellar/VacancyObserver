@@ -23,13 +23,6 @@ def test_init_and_validation() -> None:
     assert worker.full_path == pathlib.Path("Python/Vacancy/data.json")
 
 
-def test_class_attributes() -> None:
-    """Проверяем атрибуты класса"""
-    worker = JSONWorker()
-    assert worker.DEFAULT_NAME == "vacancies.json"
-    assert worker.DEFAULT_PATH == pathlib.Path(__file__).parent.parent.parent / "data"
-
-
 def test_add_vacancy_data(tmp_path, vacancy_data1: Dict[str, str | Dict]) -> None:
     """Проверяем работу метода add_vacancy_data"""
     tmp_file_name = "test.json"
@@ -39,8 +32,7 @@ def test_add_vacancy_data(tmp_path, vacancy_data1: Dict[str, str | Dict]) -> Non
     worker.add_vacancy_data(vacancy_data1)
 
     # Читаем данные из полного пути к файлу
-    with open(worker.full_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    data = worker.get_vacancy_data()
 
     assert isinstance(data, list)
     assert data == [vacancy_data1]
@@ -78,8 +70,7 @@ def test_check_for_duplicates(
     worker.add_vacancy_data(vacancy_data1)
     worker.add_vacancy_data(vacancy_data1)
 
-    with open(worker.full_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    data = worker.get_vacancy_data()
 
     assert isinstance(data, list)
     assert data == [vacancy_data1]
@@ -101,8 +92,12 @@ def test_get_vacancy_data(tmp_path, vacancy_data1, vacancy_data2) -> None:
 def test_get_vacancy_data_file_not_exist(tmp_path) -> None:
     """Проверяем работу метода get_vacancy_data при обращении к несуществующему файлу"""
     worker = JSONWorker(path=tmp_path)
+
+    if worker.full_path.exists():
+        worker.full_path.unlink()
+
     vacancy_data = worker.get_vacancy_data()
-    assert len(vacancy_data) == 0
+    assert vacancy_data == []
 
 
 def test_get_vacancy_data_empty_file(tmp_path) -> None:
@@ -112,3 +107,23 @@ def test_get_vacancy_data_empty_file(tmp_path) -> None:
 
     result = worker.get_vacancy_data()
     assert result == []
+
+
+def test_delete_vacancy(tmp_path, vacancy_data1, vacancy_data2) -> None:
+    """Проверяем работу метода delete_vacancy_data"""
+    worker = JSONWorker(path=tmp_path)
+    worker.add_vacancy_data(vacancy_data1)
+    worker.add_vacancy_data(vacancy_data2)
+    worker.delete_vacancy_data(123456)
+    data = worker.get_vacancy_data()
+
+    assert data == [vacancy_data2]
+
+
+def test_delete_method_from_empty_file(tmp_path) -> None:
+    """Проверяем корректность работы метода при попытке удалить вакансию из пустого файла"""
+    worker = JSONWorker(path=tmp_path)
+    worker.delete_vacancy_data(123456)
+
+    assert worker.get_vacancy_data() == []
+    assert worker.
