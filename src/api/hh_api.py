@@ -16,7 +16,13 @@ class HeadHunterAPI(BaseAPI):
         self.__logger = LoggerWorker()
 
     def _send_request(self, text: str, per_page: int, page: int) -> Dict[str, List[Dict[str, Any]]]:
-        """Метод отправки POST-запроса на сервер API"""
+        """
+        Метод отправки POST-запроса на сервер API
+        :param text: Ключевое слово
+        :param per_page: Количество вакансий за один запрос
+        :param page: Номер страницы
+        :return: Список вакансий
+        """
         url = self.__URL
         params: Dict[str, Any] = {
             "text": text,
@@ -39,7 +45,13 @@ class HeadHunterAPI(BaseAPI):
         return cast(Dict[str, List[Dict[str, Any]]], data)
 
     def get_vacancies(self, keyword: str, vacancies_amount: int, start_page: int = 0) -> List[Dict[str, Any]]:
-        """Публичный метод для получения вакансий c HeadHunter"""
+        """
+        Публичный метод для получения вакансий c HeadHunter
+        :param keyword: Ключевое слово
+        :param vacancies_amount: Количество вакансий за один запрос
+        :param start_page: Номер страницы
+        :return: Список вакансий
+        """
         data = self._send_request(keyword, vacancies_amount, start_page)["items"]
         self.__logger.info(f"Получено {len(data)} вакансий по ключевому слову '{keyword}'")
         return data
