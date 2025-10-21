@@ -9,7 +9,13 @@ class BaseVacancy:
     __slots__ = ("_title", "_link", "_salary", "_brief_desc", "_logger")
 
     def __init__(self, title: str, link: str, salary: Dict[str, Union[str, int, bool]], brief_desc: str) -> None:
-        """Метод инициализации"""
+        """
+        Метод инициализации
+        :param title: Название вакансии
+        :param link: Ссылка на вакансию
+        :param salary: Зарплата (словарь)
+        :param brief_desc: Краткое описание вакансии (требования)
+        """
         self._title = self._validate_title(title)
         self._link = link
         self._salary = self._validate_salary(salary)
@@ -53,7 +59,11 @@ class BaseVacancy:
 
     @staticmethod
     def _validate_salary(wage: Dict[str, Union[str, int, bool]]) -> Dict[str, Union[str, int, bool]]:
-        """Метод валидации зарплаты"""
+        """
+        Метод валидации зарплаты
+        :param wage: Зарплата (словарь)
+        :return: Зарплата (словарь)
+        """
         if not wage:
             return {"from": 0, "to": 0, "currency": "", "gross": False}
         return wage

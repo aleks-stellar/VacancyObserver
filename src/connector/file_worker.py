@@ -13,7 +13,10 @@ class FileWorker(ABC):
 
     @abstractmethod
     def add_vacancy_data(self, vacancy: Dict) -> None:
-        """Метод для добавления данных о вакансиях в файл"""
+        """
+        Метод для добавления данных о вакансиях в файл
+        :param vacancy: Словарь с данными о вакансии
+        """
         pass
 
     @property
@@ -24,20 +27,34 @@ class FileWorker(ABC):
 
     @abstractmethod
     def delete_vacancy_data(self, vacancy_id: int) -> None:
-        """Метод для удаления данных о вакансиях из файла"""
+        """
+        Метод для удаления данных о вакансиях из файла
+        :param vacancy_id: ID вакансии
+        """
         pass
 
     @abstractmethod
     def _validate_path(self, path_to_f: str) -> pathlib.Path:
-        """Метод валидации пути к файлу"""
+        """
+        Метод валидации пути к файлу
+        :param path_to_f: Путь к файлу
+        :return: Путь к файлу после валидации
+        """
         pass
 
     @abstractmethod
     def _validate_name(self, f_name: str) -> str:
-        """Метод валидации имени файла"""
+        """
+        Метод валидации имени файла
+        :param f_name: Имя файла
+        :return: Имя файла после валидации
+        """
         pass
 
     @abstractmethod
     def _write_to_file(self, data: List) -> None:
-        """Метод для записи вакансий в JSON-файл"""
+        """
+        Метод для записи вакансий в JSON-файл
+        :param data: Данные о вакансии (словарь)
+        """
         pass
