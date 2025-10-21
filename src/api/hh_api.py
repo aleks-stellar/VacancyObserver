@@ -15,12 +15,13 @@ class HeadHunterAPI(BaseAPI):
         """Инициализация API и логгера"""
         self.__logger = LoggerWorker()
 
-    def _send_request(self, text: str, per_page: int) -> Dict[str, List[Dict[str, Any]]]:
+    def _send_request(self, text: str, per_page: int, page: int = 0) -> Dict[str, List[Dict[str, Any]]]:
         """Метод отправки POST-запроса на сервер API"""
         url = self.__URL
         params: Dict[str, Any] = {
             "text": text,
-            "per_page": per_page
+            "per_page": per_page,
+            "page" : page
         }
 
         self.__logger.info(f"Отправка запроса к {url} с параметрами: {params}")
