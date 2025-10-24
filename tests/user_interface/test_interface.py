@@ -41,3 +41,15 @@ def test_invalid_input() -> None:
             user_interface()
 
     assert str(exc_info.value) == 'Необходимо ввести число "1" или "2"'
+
+    with pytest.raises(ValueError) as exc_info:
+        with patch("builtins.input", side_effect=["2", "one million dollars"]):
+            user_interface()
+
+    assert str(exc_info.value) == 'Необходимо ввести целое число'
+
+    with pytest.raises(ValueError) as exc_info:
+        with patch("builtins.input", side_effect=["2", "100000", "top five"]):
+            user_interface()
+
+    assert str(exc_info.value) == 'Необходимо ввести целое число'
