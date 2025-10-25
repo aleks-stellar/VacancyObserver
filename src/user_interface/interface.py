@@ -1,11 +1,13 @@
 from src.connector.json_worker import JSONWorker
 from src.vacancy.base_vacancy import BaseVacancy
+from src.api.hh_api import HeadHunterAPI
+from src.utils.vacancy_getter import write_vacancies_by_keyword
 
 
 def user_interface() -> None:
     """Функция для взаимодействия пользователя с приложением"""
     print(('Введите "1", если хотите получить все вакансии по ключевому слову и "2", '
-                    'если хотите получить топ N вакансий по минимальной зарплате'))
+           'если хотите получить топ N вакансий по минимальной зарплате'))
 
     try:
         operation_choice = int(input("Введите число: "))
@@ -19,10 +21,17 @@ def user_interface() -> None:
         user_keyword = input().lower()
         print(f'Вы ввели слово "{user_keyword}"')
 
-        print(f'Вакансии по ключевому слову '
-                               f'"{user_keyword}" сохранены по пути "../data/{user_keyword}.json"')
+        # Валятся тесты тк default_path не существует, пока не реализована функция write_vacancies_by_keyword
+        json_saver = JSONWorker()
+        path_to_data_file = json_saver.get_default_path()
+        write_vacancies_by_keyword(keyword=user_keyword, path=path_to_data_file)
+        vacancy_list = json_saver.get_vacancy_data(path=path_to_data_file)
 
-        print(f"Хотите получить топ N вакансий по минимальной зарплате? да/нет: ", end="")
+        for vacancy in vacancy_list:
+            json_saver.add_vacancy_data(vacancy=vacancy)
+
+        print(f'Вакансии по ключевому слову '
+              f'"{user_keyword}" сохранены по пути "../data/{user_keyword}.json"')
 
     if operation_choice == 2:
         print(f"Вы выбрали получить топ N вакансий по минимальной зарплате. "
@@ -43,7 +52,7 @@ def user_interface() -> None:
             raise ValueError('Необходимо ввести целое число')
 
         print((f'Топ {user_n_for_top} вакансий по минимальной зарплате {user_min_salary} руб. '
-                               f'сохранены по пути "../data/top_{user_n_for_top}_salary_{user_min_salary}.json"'))
+               f'сохранены по пути "../data/top_{user_n_for_top}_salary_{user_min_salary}.json"'))
 
 
 if __name__ == '__main__':

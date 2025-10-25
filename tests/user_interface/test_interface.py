@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from unittest.mock import patch
 
@@ -6,7 +8,7 @@ from src.user_interface.interface import user_interface
 
 def test_user_interface_output(capsys, first_string) -> None:
     """Тестируем поток вывода"""
-    with patch("builtins.input", side_effect=["1", "Python", "нет"]):
+    with patch("builtins.input", side_effect=["1", "Python"]):
         user_interface()
 
         captured = capsys.readouterr()
@@ -15,13 +17,10 @@ def test_user_interface_output(capsys, first_string) -> None:
         user_keyword_str = f'Вы ввели слово "python"'
         string_for_save_vacancies = f'Вакансии по ключевому слову "python" сохранены по пути "../data/python.json"'
 
-        next_step_string = "Хотите получить топ N вакансий по минимальной зарплате? да/нет: "
-
         assert first_string in captured.out
         assert string_keyword in captured.out
         assert user_keyword_str in captured.out
         assert string_for_save_vacancies in captured.out
-        assert next_step_string in captured.out
 
     with patch("builtins.input", side_effect=["2", "100000", "5"]):
         user_interface()
@@ -40,7 +39,7 @@ def test_user_interface_output(capsys, first_string) -> None:
         assert string_min_salary in captured.out
         assert string_min_salary_str in captured.out
         assert string_n_for_top_str in captured.out
-        assert  string_save_vacancies_info in captured.out
+        assert string_save_vacancies_info in captured.out
 
 
 def test_invalid_input() -> None:
@@ -66,7 +65,7 @@ def test_invalid_input() -> None:
 
 def test_case_independence(capsys) -> None:
     """Проверяем регистронезависимость ключевого слова"""
-    with patch("builtins.input", side_effect=["1", "Python", "Нет"]):
+    with patch("builtins.input", side_effect=["1", "Python"]):
         user_interface()
 
         str_for_compare = "Python"
@@ -75,3 +74,21 @@ def test_case_independence(capsys) -> None:
         captured = capsys.readouterr()
 
         assert 'Вы ввели слово "python"' in captured.out
+
+# Валятся тесты тк пока не реализована функция write_vacancies_by_keyword
+def test_search_by_keyword_file_exist() -> None:
+    """Проверяем наличие файла с данными о вакансиях по ключевому слову"""
+    with patch("builtins.input", side_effect=["1", "Python"]):
+        user_interface()
+
+        path_to_file = Path(__file__).parent.parent.parent / "data" / "python.json"
+        assert path_to_file.exists()
+
+
+def test_search_by_salary_file_exist() -> None:
+    """Проверяем наличие файла с данными о вакансиях по минимальной зарплате"""
+    with patch("builtins.input", side_effect=["2", "300000", "1"]):
+        user_interface()
+
+        path_to_file = Path(__file__).parent.parent.parent / "data" / "top_1_salary_300000.json"
+        assert path_to_file.exists()
