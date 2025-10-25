@@ -31,7 +31,7 @@ class JSONWorker(FileWorker):
             with open(self.__full_path, "r", encoding="utf-8") as f:
                 data: List[Dict] = json.load(f)
             return data
-        if path:
+        else:
             if not path.exists() or self.full_path.stat().st_size == 0:
                 return []
             with open(path, "r", encoding="utf-8") as f:
