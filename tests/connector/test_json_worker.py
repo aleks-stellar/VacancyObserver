@@ -116,6 +116,30 @@ def test_get_vacancy_data_empty_file(tmp_path: Path) -> None:
     assert result == []
 
 
+def test_get_vacancy_data_custom_path_empty_file(tmp_path: Path) -> None:
+    """Проверяем корректность работы с пустым файлом при указании собственного пути"""
+    worker = JSONWorker(path=str(tmp_path))
+    worker.full_path.touch()
+
+    result = worker.get_vacancy_data(path=tmp_path)
+    assert result == []
+
+
+def test_get_vacancy_data_custom_path(
+        tmp_path: Path,
+        vacancy_data1: Dict[str, str | Dict],
+        vacancy_data2: Dict[str, str | Dict]
+) -> None:
+    """Проверяем корректность работы при указании собственного пути"""
+    worker = JSONWorker(path=str(tmp_path), file_name="test.json")
+    worker.full_path.touch()
+    worker.add_vacancy_data(vacancy_data1)
+    worker.add_vacancy_data(vacancy_data2)
+
+    result = worker.get_vacancy_data(path=tmp_path / "test.json")
+    assert result == [vacancy_data1, vacancy_data2]
+
+
 def test_delete_vacancy(
         tmp_path: Path,
         vacancy_data1: Dict[str, str | Dict],
