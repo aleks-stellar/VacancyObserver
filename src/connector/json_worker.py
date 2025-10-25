@@ -76,6 +76,10 @@ class JSONWorker(FileWorker):
     def full_path(self) -> pathlib.Path:
         return self.__full_path
 
+    def get_default_path(self) -> pathlib.Path:
+        """Метод для чтения пути к папке по умолчания"""
+        return self.__DEFAULT_PATH
+
     def _validate_path(self, path_to_f: Optional[str]) -> pathlib.Path:
         """
                 Метод валидации пути к файлу

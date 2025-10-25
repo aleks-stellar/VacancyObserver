@@ -26,6 +26,11 @@ class FileWorker(ABC):
         pass
 
     @abstractmethod
+    def get_default_path(self) -> pathlib.Path:
+        """Метод для чтения пути к папке по умолчания"""
+        pass
+
+    @abstractmethod
     def delete_vacancy_data(self, vacancy_id: int) -> None:
         """
         Метод для удаления данных о вакансиях из файла

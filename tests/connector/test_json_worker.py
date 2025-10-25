@@ -26,6 +26,12 @@ def test_init_and_validation(tmp_path: Path) -> None:
     assert worker.full_path == another_path / "data.json"
 
 
+def test_get_default_path() -> None:
+    """Проверяем работу метода получения пути по умолчанию"""
+    worker = JSONWorker()
+    assert worker.get_default_path() == Path(__file__).parent.parent.parent / "data"
+
+
 def test_add_vacancy_data(tmp_path: Path, vacancy_data1: Dict[str, str | Dict]) -> None:
     """Проверяем работу метода add_vacancy_data"""
     tmp_file_name = "test.json"
