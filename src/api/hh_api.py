@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, cast
+from typing import Any, Dict, List, cast, Optional
 
 import requests
 
@@ -15,24 +15,30 @@ class HeadHunterAPI(BaseAPI):
         """Инициализация API и логгера"""
         self.__logger = LoggerWorker()
 
-    def _send_request(self, text: str, per_page: int, page: int) -> Dict[str, List[Dict[str, Any]]]:
+    def _send_request(
+            self,
+            text: Optional[str] = None,
+            per_page: int = 100,
+            page: int = 0,
+            salary_from: Optional[int] = None,
+    ) -> Dict[str, List[Dict[str, Any]]]:
         """
-        Метод отправки POST-запроса на сервер API
-        :param text: Ключевое слово
+        :param text: Ключевое слово для поиска
         :param per_page: Количество вакансий за один запрос
         :param page: Номер страницы
-        :return: Список вакансий
+        :param salary_from: Минимальная зарплата
+        :return: Ответ API в виде словаря
         """
-        url = self.__URL
-        params: Dict[str, Any] = {
-            "text": text,
-            "per_page": per_page,
-            "page": page
-        }
+        params: Dict[str, Any] = {"per_page": per_page, "page": page}
 
-        self.__logger.info(f"Отправка запроса к {url} с параметрами: {params}")
+        if text:
+            params["text"] = text
+        if salary_from:
+            params["salary_from"] = salary_from
 
-        response = requests.get(url, params=params)
+        self.__logger.info(f"Отправка запроса к {self.__URL} с параметрами: {params}")
+
+        response = requests.get(self.__URL, params=params)
 
         if response.status_code != 200:
             self.__logger.error(f"Ошибка запроса: статус {response.status_code}")
@@ -44,14 +50,25 @@ class HeadHunterAPI(BaseAPI):
         data = response.json()
         return cast(Dict[str, List[Dict[str, Any]]], data)
 
-    def get_vacancies(self, keyword: str, vacancies_amount: int, start_page: int = 0) -> List[Dict[str, Any]]:
+    def get_vacancies(
+            self,
+            keyword: Optional[str] = None,
+            vacancies_amount: int = 100,
+            start_page: int = 0,
+            salary_from: Optional[int] = None,
+    ) -> List[Dict[str, Any]]:
         """
         Публичный метод для получения вакансий c HeadHunter
-        :param keyword: Ключевое слово
+        :param keyword:Ключевое слово для поиска
         :param vacancies_amount: Количество вакансий за один запрос
         :param start_page: Номер страницы
-        :return: Список вакансий
+        :param salary_from: Минимальная зарплата
         """
-        data = self._send_request(keyword, vacancies_amount, start_page)["items"]
+        data = self._send_request(
+            text=keyword,
+            per_page=vacancies_amount,
+            page=start_page,
+            salary_from=salary_from,
+        )["items"]
         self.__logger.info(f"Получено {len(data)} вакансий по ключевому слову '{keyword}'")
         return data

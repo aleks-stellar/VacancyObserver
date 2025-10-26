@@ -29,7 +29,7 @@ def test_user_interface_output(tmp_path, capsys, first_string) -> None:
         assert string_for_save_vacancies in captured.out
 
     with patch("builtins.input", side_effect=["2", "100000", "5"]), \
-        patch("src.user_interface.interface.write_vacancies_by_keyword", return_value=None), \
+        patch("src.user_interface.interface.write_top_vacancies_by_salary", return_value=None), \
         patch("src.user_interface.interface.JSONWorker.get_default_path", return_value=fake_path):
 
         user_interface()
@@ -63,13 +63,13 @@ def test_invalid_input() -> None:
         with patch("builtins.input", side_effect=["2", "one million dollars"]):
             user_interface()
 
-    assert str(exc_info.value) == 'Необходимо ввести целое число'
+    assert str(exc_info.value) == 'Необходимо ввести положительное целое число'
 
     with pytest.raises(ValueError) as exc_info:
         with patch("builtins.input", side_effect=["2", "100000", "top five"]):
             user_interface()
 
-    assert str(exc_info.value) == 'Необходимо ввести целое число'
+    assert str(exc_info.value) == 'Необходимо ввести положительное целое число'
 
 
 def test_case_independence(tmp_path, capsys) -> None:
@@ -120,7 +120,7 @@ def test_search_by_salary_file_exist(tmp_path, vacancy_data1, vacancy_data2) -> 
     fake_path = tmp_path / "test_data.json"
 
     with patch("builtins.input", side_effect=["2", "300000", "1"]), \
-            patch("src.user_interface.interface.write_vacancies_by_keyword", return_value=None), \
+            patch("src.user_interface.interface.write_top_vacancies_by_salary", return_value=None), \
             patch(
                 "src.user_interface.interface.JSONWorker.get_vacancy_data",
                 return_value=[vacancy_data1, vacancy_data2]
@@ -139,3 +139,17 @@ def test_search_by_salary_file_exist(tmp_path, vacancy_data1, vacancy_data2) -> 
             data = json.load(f)
 
         assert data == [vacancy_data1, vacancy_data2]
+
+
+def test_invalid_salary_input() -> None:
+    """Некорректная зарплата"""
+    with pytest.raises(ValueError) as exc_info:
+        with patch("builtins.input", side_effect=["2", "-100000", "5"]):
+            user_interface()
+    assert str(exc_info.value) == 'Необходимо ввести положительное целое число'
+
+    # Некорректное N
+    with pytest.raises(ValueError) as exc_info:
+        with patch("builtins.input", side_effect=["2", "100000", "0"]):
+            user_interface()
+    assert str(exc_info.value) == 'Необходимо ввести положительное целое число'

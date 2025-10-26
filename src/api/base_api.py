@@ -1,12 +1,18 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 
 class BaseAPI(ABC):
     """Абстрактный класс для работы с API сервисов с вакансиями"""
 
     @abstractmethod
-    def _send_request(self, text: str, per_page: int, page: int) -> Dict[str, List[Dict[str, Any]]]:
+    def _send_request(
+            self,
+            text: Optional[str] = None,
+            per_page: int = 100,
+            page: int = 0,
+            salary_from: Optional[int] = None,
+    ) -> Dict[str, List[Dict[str, Any]]]:
         """
         Метод отправки POST-запроса на сервер API
         :param text: Ключевое слово
