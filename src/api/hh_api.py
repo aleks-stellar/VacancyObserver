@@ -29,26 +29,29 @@ class HeadHunterAPI(BaseAPI):
         :param salary_from: Минимальная зарплата
         :return: Ответ API в виде словаря
         """
-        params: Dict[str, Any] = {"per_page": per_page, "page": page}
-
+        params: Dict[str, Any] = {
+            "per_page": per_page,
+            "page": page
+        }
+        if salary_from is not None:
+            params["salary_from"] = salary_from
         if text:
             params["text"] = text
-        if salary_from:
-            params["salary_from"] = salary_from
 
         self.__logger.info(f"Отправка запроса к {self.__URL} с параметрами: {params}")
-
         response = requests.get(self.__URL, params=params)
 
-        if response.status_code != 200:
+        if response.status_code == 200:
+            items = response.json().get("items", [])
+            self.__logger.info(f"Запрос успешно выполнен, получено {len(items)} вакансий")
+            return cast(Dict[str, List[Dict[str, Any]]], response.json())
+        elif response.status_code == 400:
+            # Считаем это концом доступных вакансий
+            self.__logger.info("Достигнут конец доступных вакансий. Запрос за пределами диапазона.")
+            return {"items": []}
+        else:
             self.__logger.error(f"Ошибка запроса: статус {response.status_code}")
-            raise ConnectionError("Bad status code")
-
-        self.__logger.info(f"Запрос успешно выполнен, получено {len(response.json().get('items', []))} вакансий")
-
-        # Преобразуем ответ в JSON-формат
-        data = response.json()
-        return cast(Dict[str, List[Dict[str, Any]]], data)
+            raise ConnectionError(f"Bad status code {response.status_code}")
 
     def get_vacancies(
             self,
@@ -68,7 +71,10 @@ class HeadHunterAPI(BaseAPI):
             text=keyword,
             per_page=vacancies_amount,
             page=start_page,
-            salary_from=salary_from,
-        )["items"]
-        self.__logger.info(f"Получено {len(data)} вакансий по ключевому слову '{keyword}'")
+            salary_from=salary_from
+        ).get("items", [])
+
+        self.__logger.info(
+            f"Получено {len(data)} вакансий."
+        )
         return data

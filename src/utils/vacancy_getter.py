@@ -15,9 +15,18 @@ def write_vacancies_by_keyword(keyword: str, path: Path) -> None:
     hh_api = HeadHunterAPI()
     worker = JSONWorker(path=str(path), file_name=keyword)
     start = 0
+    page_size = 100
 
     while True:
-        vacancy_portion = hh_api.get_vacancies(keyword=keyword, vacancies_amount=100, start_page=start)
+        try:
+            vacancy_portion = hh_api.get_vacancies(
+                keyword=keyword,
+                vacancies_amount=page_size,
+                start_page=start
+            )
+        except ConnectionError:
+            break
+
         if not vacancy_portion:
             break
 
@@ -28,10 +37,9 @@ def write_vacancies_by_keyword(keyword: str, path: Path) -> None:
                 salary=vacancy_api["salary"],
                 brief_desc=vacancy_api["snippet"]["requirement"]
             )
-            vacancy_dict = vacancy_obj.get_vacancy()
-            worker.add_vacancy_data(vacancy_dict)
+            worker.add_vacancy_data(vacancy_obj.get_vacancy())
 
-        start += 100
+        start += len(vacancy_portion)
 
 
 def write_top_vacancies_by_salary(min_salary: int, top_number: int, path: Path) -> None:
@@ -42,14 +50,25 @@ def write_top_vacancies_by_salary(min_salary: int, top_number: int, path: Path) 
     worker = JSONWorker(path=str(path), file_name=f"top_{top_number}_salary_{min_salary}")
 
     start = 0
+    page_size = 100
     all_vacancies = []
 
     while True:
-        vacancy_portion = hh_api.get_vacancies(salary_from=min_salary, vacancies_amount=100, start_page=start)
+        try:
+            vacancy_portion = hh_api.get_vacancies(
+                salary_from=min_salary,
+                vacancies_amount=page_size,
+                start_page=start
+            )
+        except ConnectionError as e:
+            print(f"Ошибка запроса к API: {e}. Прерываем сбор вакансий.")
+            break
+
         if not vacancy_portion:
             break
+
         all_vacancies.extend(vacancy_portion)
-        start += 100
+        start += len(vacancy_portion)  # учитываем реальное количество полученных вакансий
 
     # Фильтруем вакансии с ненулевой зарплатой и сортируем по salary["from"]
     valid_vacancies = [
@@ -68,4 +87,3 @@ def write_top_vacancies_by_salary(min_salary: int, top_number: int, path: Path) 
             brief_desc=vac["snippet"]["requirement"]
         )
         worker.add_vacancy_data(vacancy_obj.get_vacancy())
-

@@ -70,7 +70,3 @@ def user_interface() -> None:
 
     else:
         raise ValueError('Необходимо ввести число "1" или "2"')
-
-
-if __name__ == '__main__':
-    user_interface()
