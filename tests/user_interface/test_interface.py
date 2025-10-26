@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -6,9 +7,14 @@ from unittest.mock import patch
 from src.user_interface.interface import user_interface
 
 
-def test_user_interface_output(capsys, first_string) -> None:
+def test_user_interface_output(tmp_path, capsys, first_string) -> None:
     """Тестируем поток вывода"""
-    with patch("builtins.input", side_effect=["1", "Python"]):
+    fake_path = tmp_path / "test_data.json"
+
+    with patch("builtins.input", side_effect=["1", "Python"]), \
+        patch("src.user_interface.interface.write_vacancies_by_keyword", return_value=None), \
+        patch("src.user_interface.interface.JSONWorker.get_default_path", return_value=fake_path):
+
         user_interface()
 
         captured = capsys.readouterr()
@@ -22,7 +28,10 @@ def test_user_interface_output(capsys, first_string) -> None:
         assert user_keyword_str in captured.out
         assert string_for_save_vacancies in captured.out
 
-    with patch("builtins.input", side_effect=["2", "100000", "5"]):
+    with patch("builtins.input", side_effect=["2", "100000", "5"]), \
+        patch("src.user_interface.interface.write_vacancies_by_keyword", return_value=None), \
+        patch("src.user_interface.interface.JSONWorker.get_default_path", return_value=fake_path):
+
         user_interface()
 
         captured = capsys.readouterr()
@@ -63,9 +72,13 @@ def test_invalid_input() -> None:
     assert str(exc_info.value) == 'Необходимо ввести целое число'
 
 
-def test_case_independence(capsys) -> None:
+def test_case_independence(tmp_path, capsys) -> None:
     """Проверяем регистронезависимость ключевого слова"""
-    with patch("builtins.input", side_effect=["1", "Python"]):
+    fake_path = tmp_path / "test_data.json"
+
+    with patch("builtins.input", side_effect=["1", "Python"]), \
+            patch("src.user_interface.interface.write_vacancies_by_keyword", return_value=None), \
+            patch("src.user_interface.interface.JSONWorker.get_default_path", return_value=fake_path):
         user_interface()
 
         str_for_compare = "Python"
@@ -75,20 +88,54 @@ def test_case_independence(capsys) -> None:
 
         assert 'Вы ввели слово "python"' in captured.out
 
-# Валятся тесты тк пока не реализована функция write_vacancies_by_keyword
-def test_search_by_keyword_file_exist() -> None:
-    """Проверяем наличие файла с данными о вакансиях по ключевому слову"""
-    with patch("builtins.input", side_effect=["1", "Python"]):
+
+def test_user_interface_saving_vacancies_by_keyword(tmp_path, vacancy_data1, vacancy_data2) -> None:
+    """Проверяем, что функция user_interface корректно сохраняет данные в json-файл"""
+    fake_path = tmp_path / "test_data.json"
+
+    with patch("builtins.input", side_effect=["1", "Python"]), \
+            patch("src.user_interface.interface.write_vacancies_by_keyword", return_value=None), \
+            patch(
+                "src.user_interface.interface.JSONWorker.get_vacancy_data",
+                return_value=[vacancy_data1, vacancy_data2]
+            ), \
+            patch("src.user_interface.interface.JSONWorker.add_vacancy_data", return_value=None), \
+            patch("src.user_interface.interface.JSONWorker.get_default_path", return_value=fake_path):
+
+        fake_path.touch()
+
+        with open(fake_path, "w", encoding="utf-8") as f:
+            json.dump([vacancy_data1, vacancy_data2], f, ensure_ascii=False)
+
         user_interface()
 
-        path_to_file = Path(__file__).parent.parent.parent / "data" / "python.json"
-        assert path_to_file.exists()
+        with open(fake_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        assert data == [vacancy_data1, vacancy_data2]
 
 
-def test_search_by_salary_file_exist() -> None:
-    """Проверяем наличие файла с данными о вакансиях по минимальной зарплате"""
-    with patch("builtins.input", side_effect=["2", "300000", "1"]):
+def test_search_by_salary_file_exist(tmp_path, vacancy_data1, vacancy_data2) -> None:
+    """Проверяем содержание файла с данными о вакансиях по минимальной зарплате"""
+    fake_path = tmp_path / "test_data.json"
+
+    with patch("builtins.input", side_effect=["2", "300000", "1"]), \
+            patch("src.user_interface.interface.write_vacancies_by_keyword", return_value=None), \
+            patch(
+                "src.user_interface.interface.JSONWorker.get_vacancy_data",
+                return_value=[vacancy_data1, vacancy_data2]
+            ), \
+            patch("src.user_interface.interface.JSONWorker.add_vacancy_data", return_value=None), \
+            patch("src.user_interface.interface.JSONWorker.get_default_path", return_value=fake_path):
+
+        fake_path.touch()
+
+        with open(fake_path, "w", encoding="utf-8") as f:
+            json.dump([vacancy_data1, vacancy_data2], f, ensure_ascii=False)
+
         user_interface()
 
-        path_to_file = Path(__file__).parent.parent.parent / "data" / "top_1_salary_300000.json"
-        assert path_to_file.exists()
+        with open(fake_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        assert data == [vacancy_data1, vacancy_data2]

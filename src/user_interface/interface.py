@@ -21,7 +21,6 @@ def user_interface() -> None:
         user_keyword = input().lower()
         print(f'Вы ввели слово "{user_keyword}"')
 
-        # Валятся тесты тк default_path не существует, пока не реализована функция write_vacancies_by_keyword
         json_saver = JSONWorker()
         path_to_data_file = json_saver.get_default_path()
         write_vacancies_by_keyword(keyword=user_keyword, path=path_to_data_file)
