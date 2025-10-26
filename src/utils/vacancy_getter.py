@@ -15,9 +15,12 @@ def write_vacancies_by_keyword(keyword: str, path: Path) -> None:
     """
     hh_api = HeadHunterAPI()
     worker = JSONWorker(path=str(path), file_name=keyword)
+    start = 0
     while True:
-        start = 0
         vacancy_portion = hh_api.get_vacancies(keyword=keyword, vacancies_amount=100, start_page=start)
+        if not vacancy_portion:
+            break
+
         for vacancy_api in vacancy_portion:
             vacancy_obj = BaseVacancy(
                 title=vacancy_api["name"],
@@ -27,3 +30,5 @@ def write_vacancies_by_keyword(keyword: str, path: Path) -> None:
             )
             vacancy_dict = vacancy_obj.get_vacancy()
             worker.add_vacancy_data(vacancy_dict)
+
+        start += 100
