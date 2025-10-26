@@ -23,7 +23,7 @@ class JSONWorker(FileWorker):
         self.__full_path: pathlib.Path = self.__path / self.__file_name
         self.logger: LoggerWorker = LoggerWorker()
 
-    def get_vacancy_data(self, path: pathlib.Path = None) -> List[Dict]:
+    def get_vacancy_data(self, path: Optional[pathlib.Path] = None) -> List[Dict]:
         """Метод для получения данных о вакансиях из JSON-файла"""
         if not path:
             if not self.__full_path.exists() or self.full_path.stat().st_size == 0:
@@ -35,8 +35,8 @@ class JSONWorker(FileWorker):
             if not path.exists() or self.full_path.stat().st_size == 0:
                 return []
             with open(path, "r", encoding="utf-8") as f:
-                data: List[Dict] = json.load(f)
-            return data
+                dt: List[Dict] = json.load(f)
+            return dt
 
     def add_vacancy_data(self, vacancy: Dict) -> None:
         """

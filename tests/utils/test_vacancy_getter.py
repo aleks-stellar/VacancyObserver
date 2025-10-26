@@ -1,10 +1,11 @@
-from unittest.mock import patch
 from pathlib import Path
-import pytest
+from typing import Dict, List
+from unittest.mock import patch
 
-from src.utils.vacancy_getter import write_vacancies_by_keyword, write_top_vacancies_by_salary
+from src.utils.vacancy_getter import write_top_vacancies_by_salary, write_vacancies_by_keyword
 
-def test_write_vacancies_by_keyword(tmp_path, vacancies_list):
+
+def test_write_vacancies_by_keyword(tmp_path: Path, vacancies_list: Dict[str, List]) -> None:
     """Проверяем, что функция корректно обрабатывает вакансии и вызывает add_vacancy_data"""
 
     kwd = "Python"
@@ -12,12 +13,11 @@ def test_write_vacancies_by_keyword(tmp_path, vacancies_list):
 
     # Мок данных с API: две вакансии на первой странице, пустая вторая → конец цикла
     api_response_page1 = vacancies_list["items"]
-    api_response_page2 = []  # имитация конца страниц
 
     # Список для проверки, какие вакансии "сохраняются"
     saved_vacancies = []
 
-    def fake_add_vacancy_data(vacancy):
+    def fake_add_vacancy_data(vacancy: Dict) -> None:
         saved_vacancies.append(vacancy)
 
     # Мок классов
@@ -28,7 +28,7 @@ def test_write_vacancies_by_keyword(tmp_path, vacancies_list):
         mock_api_instance = mock_api_class.return_value
 
         # side_effect функция учитывает start и завершение цикла
-        def fake_get_vacancies(keyword, vacancies_amount, start_page):
+        def fake_get_vacancies(keyword: str, vacancies_amount: int, start_page: int) -> List:
             if start_page == 0:
                 return api_response_page1
             return []  # конец данных
@@ -51,7 +51,7 @@ def test_write_vacancies_by_keyword(tmp_path, vacancies_list):
         assert vac["requirement"] == api_response_page1[i]["snippet"]["requirement"]
 
 
-def test_write_top_vacancies_by_salary(tmp_path):
+def test_write_top_vacancies_by_salary(tmp_path: Path) -> None:
     """Проверяем работу функции write_top_vacancies_by_salary"""
     fake_path = tmp_path / "top_vacancies.json"
     top_n = 2
@@ -66,7 +66,7 @@ def test_write_top_vacancies_by_salary(tmp_path):
 
     saved_vacancies = []
 
-    def fake_add_vacancy_data(vac):
+    def fake_add_vacancy_data(vac: Dict) -> None:
         saved_vacancies.append(vac)
 
     with patch("src.utils.vacancy_getter.HeadHunterAPI") as mock_api_class, \

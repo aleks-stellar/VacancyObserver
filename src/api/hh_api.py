@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, cast, Optional
+from typing import Any, Dict, List, Optional, cast
 
 import requests
 

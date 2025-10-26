@@ -1,7 +1,5 @@
 from src.connector.json_worker import JSONWorker
-from src.vacancy.base_vacancy import BaseVacancy
-from src.api.hh_api import HeadHunterAPI
-from src.utils.vacancy_getter import write_vacancies_by_keyword, write_top_vacancies_by_salary
+from src.utils.vacancy_getter import write_top_vacancies_by_salary, write_vacancies_by_keyword
 
 
 def user_interface() -> None:
@@ -20,11 +18,7 @@ def user_interface() -> None:
     path_to_data_file = json_saver.get_default_path()
 
     if operation_choice == 1:
-        print(
-            f"Вы выбрали получить все вакансии по ключевому слову. "
-            "Введите ключевое слово: ",
-            end=""
-        )
+        print("Вы выбрали получить все вакансии по ключевому слову. Введите ключевое слово: ", end="")
         user_keyword = input().strip().lower()
         print(f'Вы ввели слово "{user_keyword}"')
 
@@ -37,7 +31,7 @@ def user_interface() -> None:
 
     elif operation_choice == 2:
         # Ввод минимальной зарплаты
-        print(f"Вы выбрали получить топ N вакансий по минимальной зарплате. "
+        print("Вы выбрали получить топ N вакансий по минимальной зарплате. "
               "Введите минимальную зарплату: ", end="")
         try:
             user_min_salary = int(input())

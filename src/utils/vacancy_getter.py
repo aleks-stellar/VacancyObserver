@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List, Dict
 
 from src.api.hh_api import HeadHunterAPI
 from src.connector.json_worker import JSONWorker
